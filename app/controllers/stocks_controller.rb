@@ -21,7 +21,6 @@ class StocksController < ApplicationController
     end
 
 
-
     # create stock and seed history data
     if @stock.nil?
       current_stock_data = YahooFinance.quotes(
@@ -97,13 +96,9 @@ class StocksController < ApplicationController
       end
     end
 
-    s = @stock
-    stock_quotes = s.quotes.limit(@time_limit)
-
-    # stock_quotes = Stock.includes(:quotes).all
-    p stock_quotes
+    stock_quotes = @stock.quotes.limit(@time_limit)
     @past_stock_data = stock_quotes.map { |stock_quote| stock_quote }
-    p @past_stock_data
+
 
     if request.xhr?
       render json: { currentStockData: @stock,
