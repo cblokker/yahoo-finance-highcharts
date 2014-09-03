@@ -1,0 +1,7 @@
+<%= form_tag stocks_path, method: 'post' do %>
+  Symbol: <%= text_field_tag(:symbol) %><br>
+  Time Limit: <%= text_field_tag(:time_limit) %><br>
+  <%= submit_tag("Search") %>
+<% end %>
+
+<div class="stock-info"></div>
