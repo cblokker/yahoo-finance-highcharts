@@ -32,7 +32,7 @@ function parseClosingData(pastStockDataObjects) {
 
   for (var i = 0; i < pastStockDataObjects.length; i++) {
     console.log(pastStockDataObjects[i]);
-    floatClose = parseFloat(pastStockDataObjects[i].close);
+    floatClose = parseFloat(pastStockDataObjects[i].adjusted_close);
     result.push(floatClose);
   }
 
