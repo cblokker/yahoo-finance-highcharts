@@ -1,8 +1,15 @@
 require 'yahoo_finance'
 
-stocks = ['AAPL', 'NFLX', 'LULU', 'LUV', 'GILD', 'TSLA']
+stocks = [
+  'AAPL', 'NFLX', 'LULU', 'LUV', 'GILD',
+  'TSLA'
+]
 
-data = YahooFinance.historical_quotes('AAPL', Time::now - (24 * 60 * 60 * 60 * 10), Time::now)
+data = YahooFinance.historical_quotes(
+  'AAPL',
+  Time::now - (24 * 60 * 60 * 60 * 10),
+  Time::now
+)
 
 apple = Stock.create(symbol: 'AAPL')
 
