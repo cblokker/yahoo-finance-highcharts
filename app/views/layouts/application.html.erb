@@ -9,6 +9,21 @@
   <script src="http://code.highcharts.com/modules/exporting.js"></script>
 </head>
 <body>
+  <nav>
+    <% if current_user %>
+      <%= link_to 'Home', root_url, {class: 'btn'} %>
+      <div class="session_panel">
+        <%= link_to "Welcome " + current_user.username, user_path(current_user), {class: 'btn'} %>
+        <%= link_to 'Logout', logout_path, {class: 'btn'} %><br>
+      </div>
+    <% else %>
+      <%= link_to 'Home', root_url, {class: 'btn'} %>
+      <div class="session_panel">
+        <%= link_to 'Login', login_path, {class: 'btn'} %>
+        <%= link_to 'Sign up', new_user_path, {class: 'btn'} %><br>
+      </div>
+    <% end %>
+  </nav>
   <%= yield %>
 </body>
 </html>
