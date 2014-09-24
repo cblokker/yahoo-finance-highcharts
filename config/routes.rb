@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   resources :stocks
   resources :users
+  resources :investments
 
   root 'stocks#index'
 end
