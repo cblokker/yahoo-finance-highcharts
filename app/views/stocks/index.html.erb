@@ -1,7 +1,10 @@
-<%= form_tag stocks_path, method: 'post' do %>
-  Symbol: <%= text_field_tag(:symbol) %><br>
-  Time Limit: <%= text_field_tag(:time_limit) %><br>
-  <%= submit_tag("Search") %>
+<%= form_tag stocks_path, method: 'post', id: 'generate_graph' do %>
+  <%= text_field_tag :symbol, nil, placeholder: 'Enter Stock Symbol' %>
+  <%= text_field_tag :time_limit, nil, placeholder: 'Enter Date Range' %>
+  <%= submit_tag "Search" %>
 <% end %>
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
 
 <div class="stock-info"></div>
