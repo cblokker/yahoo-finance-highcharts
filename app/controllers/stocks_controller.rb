@@ -10,13 +10,13 @@ class StocksController < ApplicationController
     stock_symbol = params[:symbol].upcase
     @stock = Stock.find_by(symbol: stock_symbol)
     time_since_stock_updated = @stock.stock_last_updated_at if @stock
-    @time_limit = 100
+    @time_limit = 500
 
     if params[:time_limit] != ""
       @time_limit = params[:time_limit].to_i
     end
 
-    # create stock and seed history data
+    # create stock - seed history data or update stock
     if @stock.nil?
       @stock = Stock.create_stock_data(stock_symbol)
     elsif time_since_stock_updated <= 1
@@ -24,10 +24,7 @@ class StocksController < ApplicationController
     end
 
     stock_quotes = @stock.quotes.limit(@time_limit)
-    # @past_stock_data = stock_quotes.map { |stock_quote| stock_quote }
 
-    p "Stock Quotes: #{stock_quotes}"
-    p "Past Stock data: #{@past_stock_data}"
 
     if request.xhr?
       render json: {
