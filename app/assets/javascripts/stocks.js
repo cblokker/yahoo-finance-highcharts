@@ -6,26 +6,40 @@ $(document).ready(function() {
   });
 
   var $form = $('form[id=generate_graph]');
+  var $formUser = $('form[id=generate_stock_quote]');
 
-  $form.on('submit', function(e) {
-    e.preventDefault();
+  $form.on('submit', ajaxGraph);
+  $formUser.on('submit', ajaxStockQuote);
 
-    $.ajax('/stocks', {
-      type: 'POST',
-      dataType: 'json',
-      data: $form.serialize()
-    }).done(function(response) {
-      // console.log(response.pastStockData);
-      dataArray = generateDataArray(response.pastStockData);
-      console.log(dataArray);
-      renderGraph(dataArray, response.currentStockData.symbol);
-      // console.log(historyData);
-      // html = injectStockHTML(response.data.table);
 
-      // $('.stock-info').html(html)
-    })
-  });
 });
+
+function ajaxStockQuote() {
+  event.preventDefault();
+
+  $.ajax('/investments', {
+    type: 'POST',
+    dataType: 'json',
+    data: $(this).serialize()
+  }).done(function(data) {
+    console.log(data);
+    $('.stock-info').html(injectStockHTML(data));
+  })
+}
+
+function ajaxGraph() {
+  event.preventDefault();
+  console.log(this)
+
+  $.ajax('/stocks', {
+    type: 'POST',
+    dataType: 'json',
+    data: $(this).serialize()
+  }).done(function(response) {
+    dataArray = generateDataArray(response.pastStockData);
+    renderGraph(dataArray, response.currentStockData.symbol);
+  })
+}
 
 
 function parseClosingData(pastStockDataObjects) {
@@ -69,22 +83,22 @@ function generateDataArray(resultObj) {
 //   return generateDataArray(result.results);
 // }
 
-// function injectStockHTML(data) {
-//   var html = '<p><b>Asking Price: </b>' + data.ask + '</p>';
-//   html += '<p><b> Bid Price: </b>' + data.bid + '</p>';
-//   html += '<p><b> Last trade date: </b>' + data.last_trade_date  + '</p>';
-//   html += '<p><b> PE ratio: </b>' + data.pe_ratio  + '</p>';
-//   html += '<p><b> Average Daily Volume: </b>' + data.average_daily_volume  + '</p>';
-//   html += '<p><b> Earnings Per Share: </b>' + data.earnings_per_share  + '</p>';
-//   html += '<p><b> 52 Week Low: </b>' + data.low_52_weeks  + '</p>';
-//   html += '<p><b> 52 Week High: </b>' + data.high_52_weeks  + '</p>';
-//   html += '<p><b> One Year Target Price: </b>' + data.one_year_target_price  + '</p>';
-//   html += '<p><b> 52 week range: </b>' + data.weeks_range_52  + '</p>';
-//   html += '<p><b> Day Value Change: </b>' + data.day_value_change  + '</p>';
-//   html += '<p><b> Dividend Yield: </b>' + data.dividend_yield;
+function injectStockHTML(data) {
+  var html = '<p><b>Asking Price: </b>' + data.ask + '</p>';
+  html += '<p><b> Bid Price: </b>' + data.bid + '</p>';
+  html += '<p><b> Last trade date: </b>' + data.last_trade_date  + '</p>';
+  html += '<p><b> PE ratio: </b>' + data.pe_ratio  + '</p>';
+  html += '<p><b> Average Daily Volume: </b>' + data.average_daily_volume  + '</p>';
+  html += '<p><b> Earnings Per Share: </b>' + data.earnings_per_share  + '</p>';
+  html += '<p><b> 52 Week Low: </b>' + data.low_52_weeks  + '</p>';
+  html += '<p><b> 52 Week High: </b>' + data.high_52_weeks  + '</p>';
+  html += '<p><b> One Year Target Price: </b>' + data.one_year_target_price  + '</p>';
+  html += '<p><b> 52 week range: </b>' + data.weeks_range_52  + '</p>';
+  html += '<p><b> Day Value Change: </b>' + data.day_value_change  + '</p>';
+  html += '<p><b> Dividend Yield: </b>' + data.dividend_yield;
 
-//   return html;
-// };
+  return html;
+};
 
 function renderGraph(dataArray, symbol) {
   $('#container').highcharts('StockChart', {

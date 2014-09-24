@@ -1,0 +1,8 @@
+<%= @user.username %>
+
+<%= form_for :investment, url: investments_path, html: {id: "generate_stock_quote"} do |f| %>
+  <%= f.text_field :symbol, placeholder: "stock" %>
+  <%= f.submit "Discover" %>
+<% end %>
+
+<div class="stock-info"></div>
