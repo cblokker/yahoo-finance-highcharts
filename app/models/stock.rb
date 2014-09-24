@@ -1,5 +1,9 @@
+require 'yahoo_finance'
+
 class Stock < ActiveRecord::Base
   has_many :quotes
+  has_many :investments
+  has_many :users, through: :investments
 
   def stock_last_updated_at
     ((Time.now - self.updated_at) / (60 * 60 * 24)).round
