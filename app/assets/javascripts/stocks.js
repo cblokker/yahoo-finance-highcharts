@@ -5,10 +5,10 @@ $(document).ready(function() {
     }
   });
 
-  var $form = $('form');
+  var $form = $('form[name=generate_graph]');
 
   $form.on('submit', function(e) {
-    e.preventDefault();
+    // e.preventDefault();
 
     $.ajax('/stocks', {
       type: 'POST',
