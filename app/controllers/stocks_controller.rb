@@ -24,12 +24,15 @@ class StocksController < ApplicationController
     end
 
     stock_quotes = @stock.quotes.limit(@time_limit)
-    @past_stock_data = stock_quotes.map { |stock_quote| stock_quote }
+    # @past_stock_data = stock_quotes.map { |stock_quote| stock_quote }
+
+    p "Stock Quotes: #{stock_quotes}"
+    p "Past Stock data: #{@past_stock_data}"
 
     if request.xhr?
       render json: {
         currentStockData: @stock,
-        pastStockData: @past_stock_data
+        pastStockData: stock_quotes
       }.to_json
     else
       render :index

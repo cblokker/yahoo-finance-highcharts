@@ -5,10 +5,10 @@ $(document).ready(function() {
     }
   });
 
-  var $form = $('form[name=generate_graph]');
+  var $form = $('form[id=generate_graph]');
 
   $form.on('submit', function(e) {
-    // e.preventDefault();
+    e.preventDefault();
 
     $.ajax('/stocks', {
       type: 'POST',
@@ -16,9 +16,9 @@ $(document).ready(function() {
       data: $form.serialize()
     }).done(function(response) {
       // console.log(response.pastStockData);
-      historyData = parseClosingData(response.pastStockData);
-      console.log(historyData);
-      renderGraph(historyData);
+      dataArray = generateDataArray(response.pastStockData);
+      console.log(dataArray);
+      renderGraph(dataArray, response.currentStockData.symbol);
       // console.log(historyData);
       // html = injectStockHTML(response.data.table);
 
@@ -27,8 +27,9 @@ $(document).ready(function() {
   });
 });
 
+
 function parseClosingData(pastStockDataObjects) {
-  result = [];
+  var result = [];
 
   for (var i = 0; i < pastStockDataObjects.length; i++) {
     console.log(pastStockDataObjects[i]);
@@ -37,6 +38,30 @@ function parseClosingData(pastStockDataObjects) {
   }
 
   return result.reverse();
+}
+
+
+function dateData(resultObj) {
+  var result = [];
+
+  for (var i = 0; i < resultObj.length; i++) {
+    result.push(Date.parse(resultObj[i].trade_date));
+  }
+
+  return result.reverse();
+}
+
+
+function generateDataArray(resultObj) {
+  var dateArray = dateData(resultObj);
+  var priceArray = parseClosingData(resultObj);
+  var result = [];
+
+  for (var i = 0; i < resultObj.length; i++) {
+    result.push([dateArray[i], priceArray[i]]);
+  }
+
+  return result;
 }
 
 // function parseData(data) {
@@ -61,40 +86,39 @@ function parseClosingData(pastStockDataObjects) {
 //   return html;
 // };
 
-function renderGraph(dataArray) {
-  console.log(dataArray)
-  $('#container').highcharts({
-      title: {
-          text: "stock",
-          x: -20
-      },
-      // xAxis: {
-      //     categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      //         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-      // },
-      yAxis: {
-          title: {
-              text: 'Price'
-          },
-          plotLines: [{
-              value: 0,
-              width: 1,
-              color: '#808080'
-          }]
-      },
+function renderGraph(dataArray, symbol) {
+  $('#container').highcharts('StockChart', {
+    rangeSelector: {
+      selected: 1,
+      inputEnabled: $('#container').width() > 480
+    },
+    title: {
+      text: symbol + ' Stock Price'
+    },
+    yAxis: {
+      type: 'logarithmic',
+    },
+    series: [{
+      name: symbol,
+      data: dataArray,
+      type : 'area',
+      threshold : null,
       tooltip: {
-          valueSuffix: '$'
+        valueDecimals: 2
       },
-      legend: {
-          layout: 'vertical',
-          align: 'right',
-          verticalAlign: 'middle',
-          borderWidth: 0
-      },
-      series: [{
-          name: 'Tokyo',
-          data: dataArray
-      }]
+      fillColor: {
+        linearGradient: {
+          x1: 0,
+          y1: 0,
+          x2: 0,
+          y2: 1
+        },
+        stops : [
+          [0, Highcharts.getOptions().colors[0]],
+          [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+        ]
+      }
+    }]
   });
 };
 
