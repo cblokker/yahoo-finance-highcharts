@@ -7,18 +7,19 @@ $(document).ready(function() {
 
   var $form = $('form[id=generate_graph]');
   var $formUser = $('form[id=generate_stock_quote]');
+  var $formBuyStock = $('form[id=buy_stock]');
 
   $form.on('submit', ajaxGraph);
-  $formUser.on('submit', ajaxStockQuote);
-
-
+  // $formUser.on('submit', ajaxStockQuote);
+  // $formBuyStock.on('submit', ajaxBuyStock);
 });
+
 
 function ajaxStockQuote() {
   event.preventDefault();
 
   $.ajax('/investments', {
-    type: 'POST',
+    type: 'GET',
     dataType: 'json',
     data: $(this).serialize()
   }).done(function(data) {
@@ -27,9 +28,9 @@ function ajaxStockQuote() {
   })
 }
 
+
 function ajaxGraph() {
   event.preventDefault();
-  console.log(this)
 
   $.ajax('/stocks', {
     type: 'POST',
@@ -38,6 +39,19 @@ function ajaxGraph() {
   }).done(function(response) {
     dataArray = generateDataArray(response.pastStockData);
     renderGraph(dataArray, response.currentStockData.symbol);
+  })
+}
+
+
+function ajaxBuyStock() {
+  event.preventDefault();
+
+  $.ajax('/investments', {
+    type: 'POST',
+    dataType: 'json',
+    data: $(this).serialize()
+  }).done(function(response) {
+    console.log(response)
   })
 }
 
@@ -78,13 +92,16 @@ function generateDataArray(resultObj) {
   return result;
 }
 
-// function parseData(data) {
-//   var result = $.parseJSON(data.file_data);
-//   return generateDataArray(result.results);
-// }
 
 function injectStockHTML(data) {
-  var html = '<p><b>Asking Price: </b>' + data.ask + '</p>';
+  var html = "<form accept-charset='UTF-8' action='/investments' method='post' id='buy_stock'>"
+  html += '<input type="hidden" value="form_authenticity_token()" name="authenticity_token"/>'
+  html += '<input name="utf8" type="hidden" value="✓">'
+  html += "<input type='text' placeholder='number of shares'></input>"
+  html += "<input type='hidden' value=" + data.symbol + " name=investment[symbol]></input>"
+  html += "<input type='submit' value='Buy'></input>"
+  html += '</form>'
+  html += '<p><b>Asking Price: </b>' + data.ask + '</p>';
   html += '<p><b> Bid Price: </b>' + data.bid + '</p>';
   html += '<p><b> Last trade date: </b>' + data.last_trade_date  + '</p>';
   html += '<p><b> PE ratio: </b>' + data.pe_ratio  + '</p>';
@@ -100,6 +117,7 @@ function injectStockHTML(data) {
   return html;
 };
 
+
 function renderGraph(dataArray, symbol) {
   $('#container').highcharts('StockChart', {
     rangeSelector: {
@@ -111,6 +129,9 @@ function renderGraph(dataArray, symbol) {
     },
     yAxis: {
       type: 'logarithmic',
+    },
+    xAxis: {
+      gridLineWidth: 1
     },
     series: [{
       name: symbol,
