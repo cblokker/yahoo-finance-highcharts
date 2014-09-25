@@ -7,7 +7,6 @@ class CreateUsers < ActiveRecord::Migration
       t.float :cash_available
       t.float :cash_invested
 
-
       t.timestamps
     end
   end

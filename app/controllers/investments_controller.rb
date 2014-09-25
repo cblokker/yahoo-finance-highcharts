@@ -12,7 +12,6 @@ class InvestmentsController < ApplicationController
 
   def create
     @user = User.find(session[:user_id]) if session[:user_id]
-
     stock_symbol = investment_params[:symbol].upcase
     @stock = Stock.find_by(symbol: stock_symbol)
     value = investment_params[:number_of_shares].to_i * @stock.ask.to_i
@@ -35,12 +34,35 @@ class InvestmentsController < ApplicationController
     redirect_to user_path(@user)
   end
 
+  def update
+    @user = User.find(session[:user_id]) if session[:user_id]
+    stock_symbol = investment_params[:symbol].upcase
+    @stock = Stock.find_by(symbol: stock_symbol)
+    value = investment_params[:number_of_shares].to_i * @stock.ask.to_i
+    @investment = Investment.where("stock_id = ? AND user_id = ?", @stock.id, @user.id)
+
+    @investment[0].number_of_shares += investment_params[:number_of_shares].to_i
+    @investment[0].value += value
+    @investment[0].save
+
+    redirect_to user_path(@user)
+  end
+
 
   def destroy
     @user = User.find(session[:user_id]) if session[:user_id]
     stock_symbol = investment_params[:symbol].upcase
     @stock = Stock.find_by(symbol: stock_symbol)
-    @investment = Investment.find_by(stock: @stock).destroy
+    value = investment_params[:number_of_shares].to_i * @stock.ask.to_i
+    @investment = Investment.where("stock_id = ? AND user_id = ?", @stock.id, @user.id)
+
+    @investment[0].number_of_shares -= investment_params[:number_of_shares].to_i
+    @investment[0].value -= value
+    @investment[0].save
+
+    if @investment[0].value <= 0
+      @investment[0].destroy
+    end
 
     redirect_to user_path(@user)
   end

@@ -1,17 +1,20 @@
 <h1><%= @user.username %></h1>
+<p>Cash available: $<%= @user.cash_available %></p>
+<p>Cash invested: $<%= @user.cash_invested %></p>
 
 <h1>Portfolio</h1>
 
 <% @user.investments.each do |investment| %>
   <%= investment.stock.symbol %>
   <%= investment.number_of_shares %> shares
+   $<%= investment.value %>
   <%= form_for :investment, url: investment_path, html: {id: "sell_stock"}, method: :delete do |f| %>
     <%= f.hidden_field :symbol, value: investment.stock.symbol %>
     <%= f.text_field :number_of_shares, placeholder: "quantity" %>
     <%= f.submit "Sell" %>
   <% end %>
 
-  <%= form_for :investment, url: investment_path, html: {id: "sell_stock"}, method: :put do |f| %>
+  <%= form_for :investment, url: investment_path, html: {id: "add_stock"}, method: :put do |f| %>
     <%= f.hidden_field :symbol, value: investment.stock.symbol %>
     <%= f.text_field :number_of_shares, placeholder: "quantity" %>
     <%= f.submit "Add" %>
