@@ -14,38 +14,27 @@ class InvestmentsController < ApplicationController
     @user = User.find(session[:user_id]) if session[:user_id]
 
     stock_symbol = investment_params[:symbol].upcase
-    p @stock = Stock.find_by(symbol: stock_symbol)
+    @stock = Stock.find_by(symbol: stock_symbol)
 
     Investment.create(
       stock: @stock,
       user: @user
     )
 
-    # @user.investment.create(stock: @stock)
-
-
-
-    # # # @user = User.find(investment_params[:user_id])
-
-    # # # @user.investment.create(stock: @stock)
-
-    # # render :index
-
-    # respond_to do |format|
-    #   format.js
-    # end
-
-
-    # if request.xhr?
-    #   render json: @stock.to_json
-    # else
-      render :index
-    # end
+    redirect_to user_path(@user)
   end
-  
+
+  def destroy
+    @user = User.find(session[:user_id]) if session[:user_id]
+    stock_symbol = investment_params[:symbol].upcase
+    @stock = Stock.find_by(symbol: stock_symbol)
+    @investment = Investment.find_by(stock: @stock).destroy
+
+    redirect_to user_path(@user)
+  end
+
   private
   def investment_params
     params.require(:investment).permit(:symbol)
   end
-
 end

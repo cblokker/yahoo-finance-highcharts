@@ -1,4 +1,14 @@
-<%= @user.username %>
+<h1><%= @user.username %></h1>
+
+<h1>Portfolio</h1>
+
+<% @user.stocks.each do |stock| %>
+  <%= stock.symbol %>
+  <%= form_for :investment, url: investment_path, html: {id: "sell_stock"}, method: :delete do |f| %>
+    <%= f.hidden_field :symbol, value: stock.symbol %>
+    <%= f.submit "Sell" %>
+  <% end %>
+<% end %>
 
 <%= form_for :investment, url: investments_path, html: {id: "generate_stock_quote"}, method: :get, remote: true do |f| %>
   <%= f.text_field :symbol, placeholder: "stock" %>
