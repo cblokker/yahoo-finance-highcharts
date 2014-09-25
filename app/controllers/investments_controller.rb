@@ -31,6 +31,12 @@ class InvestmentsController < ApplicationController
       @investment[0].save
     end
 
+    cash_available = @user.cash_available - value
+    cash_invested = @user.cash_invested + value
+    @user.update_attribute(:cash_available, cash_available)
+    @user.update_attribute(:cash_invested, cash_invested)
+
+
     redirect_to user_path(@user)
   end
 
@@ -40,6 +46,13 @@ class InvestmentsController < ApplicationController
     @stock = Stock.find_by(symbol: stock_symbol)
     value = investment_params[:number_of_shares].to_i * @stock.ask.to_i
     @investment = Investment.where("stock_id = ? AND user_id = ?", @stock.id, @user.id)
+
+    p @user
+
+    cash_available = @user.cash_available - value
+    cash_invested = @user.cash_invested + value
+    @user.update_attribute(:cash_available, cash_available)
+    @user.update_attribute(:cash_invested, cash_invested)
 
     @investment[0].number_of_shares += investment_params[:number_of_shares].to_i
     @investment[0].value += value
@@ -56,12 +69,21 @@ class InvestmentsController < ApplicationController
     value = investment_params[:number_of_shares].to_i * @stock.ask.to_i
     @investment = Investment.where("stock_id = ? AND user_id = ?", @stock.id, @user.id)
 
-    @investment[0].number_of_shares -= investment_params[:number_of_shares].to_i
-    @investment[0].value -= value
-    @investment[0].save
+    if investment_params[:number_of_shares].to_i <= @investment[0].number_of_shares
+      @investment[0].number_of_shares -= investment_params[:number_of_shares].to_i
+      @investment[0].value -= value
+      @investment[0].save
 
-    if @investment[0].value <= 0
-      @investment[0].destroy
+      if @investment[0].value == 0
+        @investment[0].destroy
+      end
+
+      cash_available = @user.cash_available + value
+      cash_invested = @user.cash_invested - value
+      @user.update_attribute(:cash_available, cash_available)
+      @user.update_attribute(:cash_invested, cash_invested)
+    else
+
     end
 
     redirect_to user_path(@user)
