@@ -42,11 +42,7 @@ class InvestmentsController < ApplicationController
       render :index
     # end
   end
-
-  # def update
-
-  # end
-
+  
   private
   def investment_params
     params.require(:investment).permit(:symbol)
