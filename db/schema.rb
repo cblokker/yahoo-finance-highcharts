@@ -19,7 +19,9 @@ ActiveRecord::Schema.define(version: 20140924174141) do
   create_table "investments", force: true do |t|
     t.integer  "user_id"
     t.integer  "stock_id"
+    t.float    "value"
     t.float    "percent_change"
+    t.integer  "number_of_shares"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -59,6 +61,8 @@ ActiveRecord::Schema.define(version: 20140924174141) do
     t.string   "username"
     t.string   "email"
     t.integer  "password_digest"
+    t.float    "cash_available"
+    t.float    "cash_invested"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

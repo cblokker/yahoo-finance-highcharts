@@ -12,10 +12,13 @@ class Stock < ActiveRecord::Base
 
   def self.create_stock_data(stock_symbol)
     current_stock_data = Stock.yahoo_current_stock_data(stock_symbol)
-    @stock = Stock.create_stock(current_stock_data)
-    quotes = Stock.generate_historical_quotes_by_date(24 * 60 * 60 * 60 * 300, stock_symbol)
-    Stock.generate_quotes(quotes, @stock)
-    @stock
+
+    if current_stock_data[0].ask != "N/A"
+      @stock = Stock.create_stock(current_stock_data)
+      quotes = Stock.generate_historical_quotes_by_date(24 * 60 * 60 * 60 * 300, stock_symbol)
+      Stock.generate_quotes(quotes, @stock)
+      return @stock
+    end
   end
 
 

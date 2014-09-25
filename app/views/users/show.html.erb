@@ -2,12 +2,21 @@
 
 <h1>Portfolio</h1>
 
-<% @user.stocks.each do |stock| %>
-  <%= stock.symbol %>
+<% @user.investments.each do |investment| %>
+  <%= investment.stock.symbol %>
+  <%= investment.number_of_shares %> shares
   <%= form_for :investment, url: investment_path, html: {id: "sell_stock"}, method: :delete do |f| %>
-    <%= f.hidden_field :symbol, value: stock.symbol %>
+    <%= f.hidden_field :symbol, value: investment.stock.symbol %>
+    <%= f.text_field :number_of_shares, placeholder: "quantity" %>
     <%= f.submit "Sell" %>
   <% end %>
+
+  <%= form_for :investment, url: investment_path, html: {id: "sell_stock"}, method: :put do |f| %>
+    <%= f.hidden_field :symbol, value: investment.stock.symbol %>
+    <%= f.text_field :number_of_shares, placeholder: "quantity" %>
+    <%= f.submit "Add" %>
+  <% end %>
+  <br>
 <% end %>
 
 <%= form_for :investment, url: investments_path, html: {id: "generate_stock_quote"}, method: :get, remote: true do |f| %>

@@ -17,6 +17,10 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       session[:user_id] = @user.id
+      @user.update(
+        cash_available: 100_000,
+        cash_invested: 0
+      )
       redirect_to user_path(@user), notice: 'New user created.'
     else
       render :new

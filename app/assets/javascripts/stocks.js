@@ -38,7 +38,10 @@ function ajaxGraph() {
   $.ajax('/stocks', {
     type: 'POST',
     dataType: 'json',
-    data: $(this).serialize()
+    data: $(this).serialize(),
+    error: function(xhr, status, error) {
+      $('#container').html("ERROR");
+    }
   }).done(function(response) {
     dataArray = generateDataArray(response.pastStockData);
     renderGraph(dataArray, response.currentStockData.symbol);
