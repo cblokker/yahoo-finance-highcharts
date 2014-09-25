@@ -2,13 +2,11 @@ class UsersController < ApplicationController
   def index
     @user = User.find(session[:user_id])
     @investments = @user.investments.all
-    # p @data = Stock.first
   end
 
   def show
     @user = User.find(params[:id])
     @investments = @user.investments.all
-    # @data = Stock.second
   end
 
   def new
