@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140924174141) do
+ActiveRecord::Schema.define(version: 20140925205413) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,9 +19,8 @@ ActiveRecord::Schema.define(version: 20140924174141) do
   create_table "investments", force: true do |t|
     t.integer  "user_id"
     t.integer  "stock_id"
+    t.float    "number_of_shares"
     t.float    "value"
-    t.float    "percent_change"
-    t.integer  "number_of_shares"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -53,6 +52,16 @@ ActiveRecord::Schema.define(version: 20140924174141) do
     t.string   "weeks_range_52"
     t.string   "day_value_change"
     t.string   "dividend_yield"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "transactions", force: true do |t|
+    t.string   "type"
+    t.integer  "number_of_shares"
+    t.float    "price_per_share"
+    t.float    "total"
+    t.integer  "investment_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

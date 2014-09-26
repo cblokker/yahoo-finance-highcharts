@@ -25,7 +25,7 @@ function ajaxStockQuote() {
     dataType: 'json',
     data: $(this).serialize()
   }).done(function(data) {
-    console.log(data);
+    // console.log(data);
     $('.stock-info').html(injectStockHTML(data));
   })
 }
@@ -33,7 +33,6 @@ function ajaxStockQuote() {
 
 function ajaxGraph() {
   event.preventDefault();
-  console.log(this)
 
   $.ajax('/stocks', {
     type: 'POST',
@@ -43,6 +42,7 @@ function ajaxGraph() {
       $('#container').html("ERROR");
     }
   }).done(function(response) {
+    console.log(response.pastStockData)
     dataArray = generateDataArray(response.pastStockData);
     renderGraph(dataArray, response.currentStockData.symbol);
   })
@@ -58,7 +58,7 @@ function ajaxBuyStock() {
     dataType: 'json',
     data: $(this).serialize()
   }).done(function(response) {
-    console.log(response)
+    // console.log(response)
   })
 }
 
@@ -67,7 +67,6 @@ function parseClosingData(pastStockDataObjects) {
   var result = [];
 
   for (var i = 0; i < pastStockDataObjects.length; i++) {
-    console.log(pastStockDataObjects[i]);
     floatClose = parseFloat(pastStockDataObjects[i].adjusted_close);
     result.push(floatClose);
   }
@@ -136,6 +135,8 @@ function generateDataArray(resultObj) {
 
 
 function renderGraph(dataArray, symbol) {
+  console.log(dataArray);
+
   $('#container').highcharts('StockChart', {
     rangeSelector: {
       selected: 1,

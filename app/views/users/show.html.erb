@@ -6,8 +6,16 @@
 
 <% @user.investments.each do |investment| %>
   <%= investment.stock.symbol %>
-  <%= investment.number_of_shares %> shares
-   $<%= investment.value %>
+
+  <% investment.transactions.each do |t| %>
+    &nbsp <%= t.type %><br>
+    &nbsp number of shares: <%= t.number_of_shares %><br>
+    &nbsp price per share: <%= t.price_per_share %><br>
+    &nbsp total: <%= t.total %><br>
+    &nbsp time bought: <%= t.created_at %>
+    <br><br>
+  <% end %>
+
   <%= form_for :investment, url: investment_path, html: {id: "sell_stock"}, method: :delete do |f| %>
     <%= f.hidden_field :symbol, value: investment.stock.symbol %>
     <%= f.text_field :number_of_shares, placeholder: "quantity" %>

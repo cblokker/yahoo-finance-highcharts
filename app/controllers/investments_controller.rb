@@ -21,21 +21,34 @@ class InvestmentsController < ApplicationController
     if @investment.blank?
       @investment = Investment.create(
         stock: @stock,
-        user: @user,
+        user: @user
+      )
+
+      @transaction = Transaction.create(
         number_of_shares: investment_params[:number_of_shares].to_i,
-        value: value
+        price_per_share: @stock.ask.to_i,
+        total: value,
+        # type: "buy",
+        investment: @investment
       )
     else
-      @investment[0].number_of_shares += investment_params[:number_of_shares].to_i
-      @investment[0].value += value
-      @investment[0].save
+      # @investment[0].number_of_shares += investment_params[:number_of_shares].to_i
+      # @investment[0].value += value
+      # @investment[0].save
+
+      Transaction.create(
+        number_of_shares: investment_params[:number_of_shares].to_i,
+        price_per_share: @stock.ask.to_i,
+        total: value,
+        # type: "buy",
+        investment: @investment[0]
+      )
     end
 
     cash_available = @user.cash_available - value
     cash_invested = @user.cash_invested + value
     @user.update_attribute(:cash_available, cash_available)
     @user.update_attribute(:cash_invested, cash_invested)
-
 
     redirect_to user_path(@user)
   end

@@ -25,7 +25,6 @@ class StocksController < ApplicationController
 
     stock_quotes = @stock.quotes.limit(@time_limit)
 
-
     if request.xhr?
       render json: {
         currentStockData: @stock,
