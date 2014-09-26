@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 20140925205413) do
   create_table "investments", force: true do |t|
     t.integer  "user_id"
     t.integer  "stock_id"
-    t.float    "number_of_shares"
+    t.integer  "number_of_shares"
     t.float    "value"
     t.datetime "created_at"
     t.datetime "updated_at"

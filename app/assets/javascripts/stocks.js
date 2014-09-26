@@ -1,5 +1,5 @@
 $(document).ready(function() {
-   $.ajaxSetup({
+  $.ajaxSetup({
     headers: {
       'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
     }
@@ -8,6 +8,15 @@ $(document).ready(function() {
   var $form = $('form[id=generate_graph]');
   var $formUser = $('form[id=generate_stock_quote]');
   var $formBuyStock = $('form[id=buy_stock]');
+
+  var $investmentCard = $('.investment-card');
+
+  $investmentCard.mousedown(function() {
+    $(this).next().slideToggle('fast');
+    $(this).toggleClass("investment-card-active");
+    $(".investment-card").not(this).removeClass("investment-card-active");
+    $(".investment-card-details").not($(this).next()).slideUp('fast');
+  })
 
   $form.on('submit', ajaxGraph);
   // $formUser.on('submit', ajaxStockQuote);

@@ -13,3 +13,52 @@
  *= require_tree .
  *= require_self
  */
+
+
+.investment-card {
+  color: #333;
+  display: inline-block;
+  text-align: left;
+  width: 200px;
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid;
+  border-color: #999;
+  background: rgba(33, 102, 172, 0.1);
+  -webkit-box-shadow: 0 0 11px 1px #aaa;
+  -o-transition:.5s;
+  -ms-transition:.5s;
+  -moz-transition:.5s;
+  -webkit-transition:.5s;
+  transition:.5s;
+}
+
+/*.investment-card:hover {
+  background: rgba(33, 102, 172, 0.2);
+}*/
+
+.investment-card-active {
+  background: #444;
+}
+
+
+.investment-card-details {
+  position: absolute;
+  text-align: left;
+  display: none;
+  width: 200px;
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid;
+  border-color: #999;
+  background: rgba(33, 102, 172, 0.1);
+}
+
+.container {
+  text-align: center;
+  padding-top: 50px;
+  margin: 10px auto;
+  width: 100%;
+  max-width: 900px;
+}
+

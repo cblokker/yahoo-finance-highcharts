@@ -1,18 +1,20 @@
-<%= form_for :investment, url: investments_path, method: :post do |f| %>
-  <%= f.hidden_field :symbol, value: stock.symbol %>
-  <%= f.text_field :number_of_shares, placeholder: "quantity" %>
-  <%= f.submit "Buy" %>
-<% end %>
+<div id="investment-card">
+  <%= form_for :investment, url: investments_path, method: :post do |f| %>
+    <%= f.hidden_field :symbol, value: stock.symbol %>
+    <%= f.text_field :number_of_shares, placeholder: "quantity" %>
+    <%= f.submit "Buy" %>
+  <% end %>
 
-<p><b> Asking Price: </b>    <%= @stock.ask %></p>
-<p><b> Bid Price:    </b>    <%= @stock.bid %></p>
-<p><b> Last trade date: </b> <%= @stock.last_trade_date  %></p>
-<p><b> PE ratio: </b>        <%= @stock.pe_ratio  %></p>
-<p><b> Average Daily Volume: </b> <%= @stock.average_daily_volume  %></p>
-<p><b> Earnings Per Share: </b>   <%= @stock.earnings_per_share  %></p>
-<p><b> 52 Week Low: </b>          <%= @stock.low_52_weeks  %></p>
-<p><b> 52 Week High: </b>         <%= @stock.high_52_weeks  %></p>
-<p><b> One Year Target Price:</b> <%= @stock.one_year_target_price  %></p>
-<p><b> 52 week range: </b>        <%= @stock.weeks_range_52  %></p>
-<p><b> Day Value Change: </b>     <%= @stock.day_value_change  %></p>
-<p><b> Dividend Yield: </b>       <%= @stock.dividend_yield %></p>
+  <p><b> Asking Price: </b>    <%= @stock.ask %></p>
+  <p><b> Bid Price:    </b>    <%= @stock.bid %></p>
+  <p><b> Last trade date: </b> <%= @stock.last_trade_date  %></p>
+  <p><b> PE ratio: </b>        <%= @stock.pe_ratio  %></p>
+  <p><b> Average Daily Volume: </b> <%= @stock.average_daily_volume  %></p>
+  <p><b> Earnings Per Share: </b>   <%= @stock.earnings_per_share  %></p>
+  <p><b> 52 Week Low: </b>          <%= @stock.low_52_weeks  %></p>
+  <p><b> 52 Week High: </b>         <%= @stock.high_52_weeks  %></p>
+  <p><b> One Year Target Price:</b> <%= @stock.one_year_target_price  %></p>
+  <p><b> 52 week range: </b>        <%= @stock.weeks_range_52  %></p>
+  <p><b> Day Value Change: </b>     <%= @stock.day_value_change  %></p>
+  <p><b> Dividend Yield: </b>       <%= @stock.dividend_yield %></p>
+</div>

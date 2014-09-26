@@ -18,7 +18,8 @@ class InvestmentsController < ApplicationController
 
     @investment = Investment.where("stock_id = ? AND user_id = ?", @stock.id, @user.id)
 
-    if @investment.blank?
+
+    if @investment.blank? && @user.cash_available > value
       @investment = Investment.create(
         stock: @stock,
         user: @user,
@@ -33,7 +34,13 @@ class InvestmentsController < ApplicationController
         order: "buy",
         investment: @investment
       )
-    else
+
+      cash_available = @user.cash_available - value
+      cash_invested = @user.cash_invested + value
+      @user.update_attribute(:cash_available, cash_available)
+      @user.update_attribute(:cash_invested, cash_invested)
+
+    elsif @user.cash_available > value
       @investment[0].number_of_shares += investment_params[:number_of_shares].to_i
       @investment[0].value += value
       @investment[0].save
@@ -45,12 +52,14 @@ class InvestmentsController < ApplicationController
         order: "buy",
         investment: @investment[0]
       )
+
+      cash_available = @user.cash_available - value
+      cash_invested = @user.cash_invested + value
+      @user.update_attribute(:cash_available, cash_available)
+      @user.update_attribute(:cash_invested, cash_invested)
     end
 
-    cash_available = @user.cash_available - value
-    cash_invested = @user.cash_invested + value
-    @user.update_attribute(:cash_available, cash_available)
-    @user.update_attribute(:cash_invested, cash_invested)
+
 
     redirect_to user_path(@user)
   end
@@ -62,24 +71,26 @@ class InvestmentsController < ApplicationController
     value = investment_params[:number_of_shares].to_i * @stock.ask.to_i
     @investment = Investment.where("stock_id = ? AND user_id = ?", @stock.id, @user.id)
 
-    p @user
+    if @user.cash_available > value
+      cash_available = @user.cash_available - value
+      cash_invested = @user.cash_invested + value
+      @user.update_attribute(:cash_available, cash_available)
+      @user.update_attribute(:cash_invested, cash_invested)
 
-    cash_available = @user.cash_available - value
-    cash_invested = @user.cash_invested + value
-    @user.update_attribute(:cash_available, cash_available)
-    @user.update_attribute(:cash_invested, cash_invested)
+      @investment[0].number_of_shares += investment_params[:number_of_shares].to_i
+      @investment[0].value += value
+      @investment[0].save
 
-    @investment[0].number_of_shares += investment_params[:number_of_shares].to_i
-    @investment[0].value += value
-    @investment[0].save
-
-    Transaction.create(
-      number_of_shares: investment_params[:number_of_shares].to_i,
-      price_per_share: @stock.ask.to_i,
-      total: value,
-      order: "buy",
-      investment: @investment[0]
-    )
+      Transaction.create(
+        number_of_shares: investment_params[:number_of_shares].to_i,
+        price_per_share: @stock.ask.to_i,
+        total: value,
+        order: "buy",
+        investment: @investment[0]
+      )
+    else
+      # error
+    end
 
     redirect_to user_path(@user)
   end
@@ -94,7 +105,12 @@ class InvestmentsController < ApplicationController
 
     if investment_params[:number_of_shares].to_i == @investment[0].number_of_shares
       @investment[0].destroy
-      
+
+      cash_available = @user.cash_available + value
+      cash_invested = @user.cash_invested - value
+      @user.update_attribute(:cash_available, cash_available)
+      @user.update_attribute(:cash_invested, cash_invested)
+
     elsif investment_params[:number_of_shares].to_i < @investment[0].number_of_shares
       @investment[0].number_of_shares -= investment_params[:number_of_shares].to_i
       @investment[0].value -= value
@@ -112,6 +128,8 @@ class InvestmentsController < ApplicationController
       cash_invested = @user.cash_invested - value
       @user.update_attribute(:cash_available, cash_available)
       @user.update_attribute(:cash_invested, cash_invested)
+    else
+      # error
     end
 
     redirect_to user_path(@user)
