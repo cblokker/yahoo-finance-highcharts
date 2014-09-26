@@ -16,31 +16,33 @@ class InvestmentsController < ApplicationController
     @stock = Stock.find_by(symbol: stock_symbol)
     value = investment_params[:number_of_shares].to_i * @stock.ask.to_i
 
-    p @investment = Investment.where("stock_id = ? AND user_id = ?", @stock.id, @user.id)
+    @investment = Investment.where("stock_id = ? AND user_id = ?", @stock.id, @user.id)
 
     if @investment.blank?
       @investment = Investment.create(
         stock: @stock,
-        user: @user
+        user: @user,
+        number_of_shares: investment_params[:number_of_shares].to_i,
+        value: value
       )
 
       @transaction = Transaction.create(
         number_of_shares: investment_params[:number_of_shares].to_i,
         price_per_share: @stock.ask.to_i,
         total: value,
-        # type: "buy",
+        order: "buy",
         investment: @investment
       )
     else
-      # @investment[0].number_of_shares += investment_params[:number_of_shares].to_i
-      # @investment[0].value += value
-      # @investment[0].save
+      @investment[0].number_of_shares += investment_params[:number_of_shares].to_i
+      @investment[0].value += value
+      @investment[0].save
 
       Transaction.create(
         number_of_shares: investment_params[:number_of_shares].to_i,
         price_per_share: @stock.ask.to_i,
         total: value,
-        # type: "buy",
+        order: "buy",
         investment: @investment[0]
       )
     end
@@ -71,6 +73,14 @@ class InvestmentsController < ApplicationController
     @investment[0].value += value
     @investment[0].save
 
+    Transaction.create(
+      number_of_shares: investment_params[:number_of_shares].to_i,
+      price_per_share: @stock.ask.to_i,
+      total: value,
+      order: "buy",
+      investment: @investment[0]
+    )
+
     redirect_to user_path(@user)
   end
 
@@ -82,21 +92,26 @@ class InvestmentsController < ApplicationController
     value = investment_params[:number_of_shares].to_i * @stock.ask.to_i
     @investment = Investment.where("stock_id = ? AND user_id = ?", @stock.id, @user.id)
 
-    if investment_params[:number_of_shares].to_i <= @investment[0].number_of_shares
+    if investment_params[:number_of_shares].to_i == @investment[0].number_of_shares
+      @investment[0].destroy
+      
+    elsif investment_params[:number_of_shares].to_i < @investment[0].number_of_shares
       @investment[0].number_of_shares -= investment_params[:number_of_shares].to_i
       @investment[0].value -= value
       @investment[0].save
 
-      if @investment[0].value == 0
-        @investment[0].destroy
-      end
+      Transaction.create(
+        number_of_shares: investment_params[:number_of_shares].to_i,
+        price_per_share: @stock.ask.to_i,
+        total: -value,
+        order: 'sell',
+        investment: @investment[0]
+      )
 
       cash_available = @user.cash_available + value
       cash_invested = @user.cash_invested - value
       @user.update_attribute(:cash_available, cash_available)
       @user.update_attribute(:cash_invested, cash_invested)
-    else
-
     end
 
     redirect_to user_path(@user)

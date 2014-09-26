@@ -1,7 +1,7 @@
 class CreateTransactions < ActiveRecord::Migration
   def change
     create_table :transactions do |t|
-      t.string :type
+      t.string :order
       t.integer :number_of_shares
       t.float :price_per_share
       t.float :total

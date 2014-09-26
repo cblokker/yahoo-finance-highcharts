@@ -57,7 +57,7 @@ ActiveRecord::Schema.define(version: 20140925205413) do
   end
 
   create_table "transactions", force: true do |t|
-    t.string   "type"
+    t.string   "order"
     t.integer  "number_of_shares"
     t.float    "price_per_share"
     t.float    "total"
