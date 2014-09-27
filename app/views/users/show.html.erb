@@ -1,6 +1,10 @@
 <h1><%= @user.username %></h1>
 <p>Cash available: $<%= @user.cash_available %></p>
 <p>Cash invested: $<%= @user.cash_invested %></p>
+<%= form_for :investment, url: investments_path, html: {id: "generate_stock_quote"}, method: :get, remote: true do |f| %>
+  <%= f.text_field :symbol, placeholder: "stock" %>
+  <%= f.submit "Discover" %>
+<% end %>
 
 <h1>Portfolio</h1>
 
@@ -20,13 +24,13 @@
       <%= form_for :investment, url: investment_path, html: {id: "sell_stock"}, method: :delete do |f| %>
         <%= f.hidden_field :symbol, value: investment.stock.symbol %>
         <%= f.text_field :number_of_shares, placeholder: "quantity" %>
-        <%= f.submit "Sell" %>
+        <%= f.submit "Sell", {class: 'btn'}%>
       <% end %>
 
       <%= form_for :investment, url: investment_path, html: {id: "add_stock"}, method: :put do |f| %>
         <%= f.hidden_field :symbol, value: investment.stock.symbol %>
         <%= f.text_field :number_of_shares, placeholder: "quantity" %>
-        <%= f.submit "Add" %>
+        <%= f.submit "Add", {class: 'btn'}%>
       <% end %>
 
       <button type="submit" name="performance" class="btn">Performance</button>
@@ -79,9 +83,5 @@
 <% end %>
 <br>
 
-<%= form_for :investment, url: investments_path, html: {id: "generate_stock_quote"}, method: :get, remote: true do |f| %>
-  <%= f.text_field :symbol, placeholder: "stock" %>
-  <%= f.submit "Discover" %>
-<% end %>
 
 <div class="stock-info"></div>

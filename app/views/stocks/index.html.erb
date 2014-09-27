@@ -1,4 +1,15 @@
-<div id="container" style="width: 800px; height: 500px; margin: 0 auto"></div>
-
+<div id="landing-image"></div>
+<div id="search-stock">
+  <h2>Practice investing strategies</h2>
+  <h2>Compete with your friends</h2>
+  <%= form_tag stocks_path, method: 'post', id: 'generate_graph' do %>
+    <%= text_field_tag :symbol, nil, placeholder: 'Enter Stock Symbol' %>
+    <%= hidden_field_tag :time_limit, nil, placeholder: 'Enter Date Range' %>
+    <button type="submit" class="btn btn-success">
+      &nbsp<i class="fa fa-search"></i>&nbsp
+    </button>
+  <% end %>
+</div>
+<div id="stock-graph"></div>
 
 <div class="stock-info"></div>

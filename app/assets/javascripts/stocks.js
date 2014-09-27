@@ -193,7 +193,7 @@ function generateDataArray(resultObj) {
 function renderGraph(dataArray, symbol) {
   console.log(dataArray);
 
-  $('#container').highcharts('StockChart', {
+  $('#stock-graph').highcharts('StockChart', {
     rangeSelector: {
       selected: 1,
       inputEnabled: $('#container').width() > 480
@@ -229,6 +229,8 @@ function renderGraph(dataArray, symbol) {
       }
     }]
   });
+
+  $('html, body').animate({scrollTop: $('#stock-graph').offset().top - 60}, 'slow');
 };
 
 

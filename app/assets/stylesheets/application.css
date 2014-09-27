@@ -17,6 +17,24 @@
 body {
   margin: 0px;
   padding: 0px;
+
+}
+
+#landing-image {
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: #333 url('landing.png') no-repeat top center;
+    background-size: cover;
+    filter: blur(5px);
+    opacity: .8;
+    transform: scale(1.1);
 }
 
 a {
@@ -62,9 +80,6 @@ input:focus, textarea:focus, button:focus {
   transition:.5s;
 }
 
-/*.investment-card:hover {
-  background: rgba(33, 102, 172, 0.2);
-}*/
 
 .investment-card-active {
   background: #444;
@@ -124,6 +139,19 @@ nav {
   background-color: #F6F6EF;
   color: #20272D;
   border: 1px solid #20272D;
+}
+
+#stock-graph {
+  position: absolute;
+  margin-top: 450px;
+  width: 800px;
+  height: 500px;
+  z-index: 10;
+}
+
+#search-stock {
+  margin-top: 300px;
+  vertical-align: middle;
 }
 
 .investment-performance {
