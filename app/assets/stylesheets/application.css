@@ -14,6 +14,35 @@
  *= require_self
  */
 
+body {
+  margin: 0px;
+  padding: 0px;
+}
+
+a {
+  text-decoration: none;
+}
+
+form {
+  margin: 0px;
+  padding: 0px;
+}
+
+.stock-search {
+  float: left;
+  margin-top: -12px;
+  margin-left: 30px;
+}
+
+input {
+  margin: 0 auto;
+  font-size: 18px;
+  padding: 10px;
+}
+
+input:focus, textarea:focus, button:focus {
+  outline: none;
+}
 
 .investment-card {
   color: #333;
@@ -41,12 +70,18 @@
   background: #444;
 }
 
+.session-panel {
+  float: right;
+  padding-right: 30px;
+}
+
 
 .investment-card-details {
   position: absolute;
+  text-align: center;
   text-align: left;
   display: none;
-  width: 200px;
+  width: 800px;
   margin: 10px;
   padding: 20px;
   border: 1px solid;
@@ -60,5 +95,50 @@
   margin: 10px auto;
   width: 100%;
   max-width: 900px;
+}
+
+nav {
+  background-color: #02a9b9;
+  width: 100%;
+  margin-top: -10px;
+  padding: 20px;
+  padding-left: 10px;
+  position: fixed;
+  z-index: 2;
+}
+
+.btn {
+  background-color: #20272D;
+  color: #edf2f2;
+  padding: 10px;
+  font-size: 18px;
+  border: 1px solid #20272D;
+  -o-transition:.5s;
+  -ms-transition:.5s;
+  -moz-transition:.5s;
+  -webkit-transition:.5s;
+  transition:.5s;
+}
+
+.btn:hover {
+  background-color: #F6F6EF;
+  color: #20272D;
+  border: 1px solid #20272D;
+}
+
+.investment-performance {
+  display: none;
+}
+
+.investment-fundamentals {
+  display: none;
+}
+
+.investment-transaction-history {
+  display: none;
+}
+
+.investment-transaction-headlines {
+  display: none;
 }
 

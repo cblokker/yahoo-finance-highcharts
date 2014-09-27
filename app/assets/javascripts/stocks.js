@@ -8,22 +8,69 @@ $(document).ready(function() {
   var $form = $('form[id=generate_graph]');
   var $formUser = $('form[id=generate_stock_quote]');
   var $formBuyStock = $('form[id=buy_stock]');
-
   var $investmentCard = $('.investment-card');
 
+  var $buttonPerformance = $('button[name=performance]');
+  var $buttonFundamentals = $('button[name=fundamentals]');
+  var $buttonTransactionHistory = $('button[name=transaction-history]');
+  var $buttonHeadlines = $('button[name=headlines]');
+
+  $buttonPerformance.on('click', performaceButtonToggle);
+  $buttonFundamentals.on('click', fundamentalsButtonToggle);
+  $buttonTransactionHistory.on('click', transactionHistoryButtonToggle);
+  $buttonHeadlines.on('click', headlinesButtonToggle);
+
+  // $buttonArticle.on('click', articleButtonToggle)
+  // $buttonBill.on('click', billButtonToggle)
+  // $buttonEmail.on('click', emailButtonAccordian)
+  // $btn.on('click', toggleButtons);
+
+  // function toggleButtons() {
+  //   $btn.not(this).removeClass('btnactive');
+  //   $(this).toggleClass('btnactive');
+  // }
+
+  function performaceButtonToggle() {
+    $('.investment-performance').fadeIn('fast');
+    $('.investment-fundamentals').fadeOut('fast');
+    $('.investment-transaction-history').fadeOut('fast');
+    $('.investment-headlines').fadeOut('fast');
+  }
+
+  function fundamentalsButtonToggle() {
+    $('.investment-performance').fadeOut('fast');
+    $('.investment-fundamentals').fadeIn('fast');
+    $('.investment-transaction-history').fadeOut('fast');
+    $('.investment-headlines').fadeOut('fast');
+  }
+
+  function transactionHistoryButtonToggle() {
+    $('.investment-performance').fadeOut('fast');
+    $('.investment-fundamentals').fadeOut('fast');
+    $('.investment-transaction-history').fadeIn('fast');
+    $('.investment-headlines').fadeOut('fast');
+  }
+
+  function headlinesButtonToggle() {
+    $('.investment-performance').fadeOut('fast');
+    $('.investment-fundamentals').fadeOut('fast');
+    $('.investment-transaction-history').fadeOut('fast');
+    $('.investment-headlines').fadeIn('fast');
+  }
+
+
   $investmentCard.mousedown(function() {
-    $(this).next().slideToggle('fast');
-    $(this).toggleClass("investment-card-active");
     $(".investment-card").not(this).removeClass("investment-card-active");
-    $(".investment-card-details").not($(this).next()).slideUp('fast');
+    $(this).toggleClass("investment-card-active");
+
+    $(".investment-card-details").not($(this).next()).fadeOut('fast');
+    $(this).next().fadeToggle('fast');
   })
 
   $form.on('submit', ajaxGraph);
   // $formUser.on('submit', ajaxStockQuote);
   // $formBuyStock.on('submit', ajaxBuyStock);
 });
-
-
 
 
 function ajaxStockQuote() {

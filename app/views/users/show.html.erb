@@ -14,26 +14,65 @@
   </div>
 
   <div class="investment-card-details">
-    <% investment.transactions.each do |t| %>
-      &nbsp <%= t.order %><br>
-      &nbsp number of shares: <%= t.number_of_shares %><br>
-      &nbsp price per share: <%= t.price_per_share %><br>
-      &nbsp total: <%= t.total %><br>
-      &nbsp time bought: <%= t.created_at %>
-      <br><br>
-    <% end %>
+    <center>
+      <h2><%= investment.stock.symbol %> information</h2>
 
-    <%= form_for :investment, url: investment_path, html: {id: "sell_stock"}, method: :delete do |f| %>
-      <%= f.hidden_field :symbol, value: investment.stock.symbol %>
-      <%= f.text_field :number_of_shares, placeholder: "quantity" %>
-      <%= f.submit "Sell" %>
-    <% end %>
+      <%= form_for :investment, url: investment_path, html: {id: "sell_stock"}, method: :delete do |f| %>
+        <%= f.hidden_field :symbol, value: investment.stock.symbol %>
+        <%= f.text_field :number_of_shares, placeholder: "quantity" %>
+        <%= f.submit "Sell" %>
+      <% end %>
 
-    <%= form_for :investment, url: investment_path, html: {id: "add_stock"}, method: :put do |f| %>
-      <%= f.hidden_field :symbol, value: investment.stock.symbol %>
-      <%= f.text_field :number_of_shares, placeholder: "quantity" %>
-      <%= f.submit "Add" %>
-    <% end %>
+      <%= form_for :investment, url: investment_path, html: {id: "add_stock"}, method: :put do |f| %>
+        <%= f.hidden_field :symbol, value: investment.stock.symbol %>
+        <%= f.text_field :number_of_shares, placeholder: "quantity" %>
+        <%= f.submit "Add" %>
+      <% end %>
+
+      <button type="submit" name="performance" class="btn">Performance</button>
+      <button type="submit" name="fundamentals" class="btn">Fundamentals</button>
+      <button type="submit" name="transaction-history" class="btn">Transaction History</button>
+      <button type="submit" name="headlines" class="btn">Headlines</button>
+    </center>
+
+    <div class="investment-performance">
+      Ticker:<br>
+      Price:<br>
+      Change ($, %):<br>
+      Value:<br>
+      Day Change:<br>
+      Total Gain:<br>
+    </div>
+
+    <div class="investment-fundamentals">
+      Price: <%= investment.stock.ask %><br>
+      P/E: <%= investment.stock.pe_ratio %><br>
+      P/B:<br>
+      EPS: <%= investment.stock.earnings_per_share %><br>
+      ROA:<br>
+      ROE:<br>
+      Net Margin:<br>
+      Rev. Growth:<br>
+    </div>
+
+    <div class="investment-transaction-history">
+      <% investment.transactions.each do |t| %>
+        &nbsp <%= t.order %><br>
+        &nbsp number of shares: <%= t.number_of_shares %><br>
+        &nbsp price per share: <%= t.price_per_share %><br>
+        &nbsp total: <%= t.total %><br>
+        &nbsp time bought: <%= t.created_at %>
+        <br><br>
+      <% end %>
+    </div>
+
+    <div class="investment-transaction-headlines">
+      <p>Headlines</p>
+    </div>
+
+
+    <br><br>
+
     <br>
   </div>
 
