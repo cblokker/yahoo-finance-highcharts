@@ -5,24 +5,19 @@
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
+  <link href='tabulous.css' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
   <script src="http://code.highcharts.com/stock/highstock.js"></script>
   <script src="http://code.highcharts.com/modules/exporting.js"></script>
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <script type="text/javascript" src="tabulous.js"></script>
 </head>
 <body>
   <nav>
     <% if current_user %>
       <div style="float:left;">
-        <%= link_to 'WealthCAST', root_url, {class: 'btn'} %>
-      </div>
-      <div class="stock-search">
-        <%= form_tag stocks_path, method: 'post', id: 'generate_graph' do %>
-          <%= text_field_tag :symbol, nil, placeholder: 'Enter Stock Symbol' %>
-          <%= hidden_field_tag :time_limit, nil, placeholder: 'Enter Date Range' %>
-          <button type="submit" class="btn btn-success">
-            &nbsp<i class="fa fa-search"></i>&nbsp
-          </button>
-        <% end %>
+        <%= link_to 'WealthMark', root_url, {class: 'btn'} %>
       </div>
 
       <div class="session-panel">
@@ -30,16 +25,7 @@
         <%= link_to 'Logout', logout_path, {class: 'btn'} %><br>
       </div>
     <% else %>
-      <%= link_to 'WealthCAST', root_url, {class: 'btn'} %>
-      <div style="float:left;">
-        <%= form_tag stocks_path, method: 'post', id: 'generate_graph' do %>
-          <%= text_field_tag :symbol, nil, placeholder: 'Enter Stock Symbol' %>
-          <%= hidden_field_tag :time_limit, nil, placeholder: 'Enter Date Range' %>
-          <button type="submit" class="btn btn-success">
-            &nbsp<i class="fa fa-search"></i>&nbsp
-          </button>
-        <% end %>
-      </div>
+      <%= link_to 'WealthMark', root_url, {class: 'btn'} %>
 
       <div class="session-panel">
         <%= link_to 'Login', login_path, {class: 'btn'} %>
@@ -47,6 +33,27 @@
       </div>
     <% end %>
   </nav>
+
+  <nav id="search-nav">
+    <%= form_tag stocks_path, method: 'post', id: 'generate_graph' do %>
+      <%= text_field_tag :symbol, nil, placeholder: 'Enter Stock Symbol' %>
+      <%= hidden_field_tag :time_limit, nil, placeholder: 'Enter Date Range' %>
+      <button type="submit" class="btn btn-success">
+        &nbsp<i class="fa fa-search"></i>&nbsp
+      </button>
+    <% end %>
+  </nav>
+
+  <div id="stock-wrapper">
+    <div id="stock-info-short">
+      <div id="stock-info"></div>
+    </div>
+
+    <div id="stock-graph"></div>
+    
+    <button type="submit" name="buy" class="btn">Buy</button>
+    <button type="submit" name="sell" class="btn">Sell</button>
+  </div>
 
   <div class="container">
     <%= yield %>

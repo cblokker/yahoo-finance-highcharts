@@ -30,7 +30,7 @@ gem 'yahoo-finance'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
-gem 'font-awesome-less'
+# gem 'font-awesome-less'
 
 # Use unicorn as the app server
 # gem 'unicorn'

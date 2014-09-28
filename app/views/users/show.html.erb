@@ -1,13 +1,26 @@
-<h1><%= @user.username %></h1>
-<p>Cash available: $<%= @user.cash_available %></p>
-<p>Cash invested: $<%= @user.cash_invested %></p>
+<div id="user-info">
+  <h1><%= @user.username %></h1>
+  <p>Cash available: $<%= @user.cash_available %></p>
+  <p>Cash invested: $<%= @user.cash_invested %></p>
+</div>
+
 <%= form_for :investment, url: investments_path, html: {id: "generate_stock_quote"}, method: :get, remote: true do |f| %>
   <%= f.text_field :symbol, placeholder: "stock" %>
-  <%= f.submit "Discover" %>
+  <%= f.submit "Discover", {class: 'btn'} %>
+<% end %>
+
+<%= form_for :investment, url: investments_path, method: :post do |f| %>
+  <%= f.text_field :number_of_shares, placeholder: "quantity" %>
+  <%= f.submit "Buy" %>
+<% end %>
+
+<%= form_for :investment, url: investment_path, html: {id: "add_stock"}, method: :put do |f| %>
+  <%= f.text_field :number_of_shares, placeholder: "quantity", class: 'shares' %> shares of
+  <%= f.text_field :symbol, placeholder: "symbol", class: 'shares' %>
+  <%= f.submit "Buy", {class: 'btn'} %>
 <% end %>
 
 <h1>Portfolio</h1>
-
 
 <% @user.investments.each do |investment| %>
 
@@ -21,16 +34,18 @@
     <center>
       <h2><%= investment.stock.symbol %> information</h2>
 
-      <%= form_for :investment, url: investment_path, html: {id: "sell_stock"}, method: :delete do |f| %>
-        <%= f.hidden_field :symbol, value: investment.stock.symbol %>
-        <%= f.text_field :number_of_shares, placeholder: "quantity" %>
-        <%= f.submit "Sell", {class: 'btn'}%>
-      <% end %>
-
       <%= form_for :investment, url: investment_path, html: {id: "add_stock"}, method: :put do |f| %>
         <%= f.hidden_field :symbol, value: investment.stock.symbol %>
-        <%= f.text_field :number_of_shares, placeholder: "quantity" %>
-        <%= f.submit "Add", {class: 'btn'}%>
+        <%= f.text_field :number_of_shares, placeholder: "quantity", class: 'shares' %> shares x
+        $<%= investment.stock.ask %>
+        <%= f.submit "Buy", {class: 'btn'} %>
+      <% end %>
+
+      <%= form_for :investment, url: investment_path, html: {id: "sell_stock"}, method: :delete do |f| %>
+        <%= f.hidden_field :symbol, value: investment.stock.symbol %>
+        <%= f.text_field :number_of_shares, placeholder: "quantity", class: 'shares' %> shares x
+        $<%= investment.stock.ask %>
+        <%= f.submit "Sell", {class: 'btn'} %>
       <% end %>
 
       <button type="submit" name="performance" class="btn">Performance</button>
@@ -84,4 +99,3 @@
 <br>
 
 
-<div class="stock-info"></div>
