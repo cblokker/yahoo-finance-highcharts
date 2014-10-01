@@ -13,25 +13,22 @@
     <%= investment.stock.symbol %><br>
     <%= investment.number_of_shares %> shares<br> 
     $<%= investment.value %> invested <br>
-  </div>
-
-  <div class="investment-card-details">
-    <center>
-      <h2><%= investment.stock.symbol %> information</h2>
-
-      <%= form_for :investment, url: investment_path, html: {id: "add_stock"}, method: :put do |f| %>
+     <%= form_for :investment, url: investment_path, html: {id: "add_stock"}, method: :put do |f| %>
         <%= f.hidden_field :symbol, value: investment.stock.symbol %>
-        <%= f.text_field :number_of_shares, placeholder: "quantity", class: 'shares' %> shares x
-        $<%= investment.stock.ask %>
+        <%= f.text_field :number_of_shares, placeholder: "quantity", class: 'shares' %>
         <%= f.submit "Buy", {class: 'btn'} %>
       <% end %>
 
       <%= form_for :investment, url: investment_path, html: {id: "sell_stock"}, method: :delete do |f| %>
         <%= f.hidden_field :symbol, value: investment.stock.symbol %>
-        <%= f.text_field :number_of_shares, placeholder: "quantity", class: 'shares' %> shares x
-        $<%= investment.stock.ask %>
+        <%= f.text_field :number_of_shares, placeholder: "quantity", class: 'shares' %>
         <%= f.submit "Sell", {class: 'btn'} %>
       <% end %>
+  </div>
+
+  <div class="investment-card-details">
+    <center>
+      <h2><%= investment.stock.symbol %> information</h2>
 
       <button type="submit" name="performance" class="btn">Performance</button>
       <button type="submit" name="fundamentals" class="btn">Fundamentals</button>
