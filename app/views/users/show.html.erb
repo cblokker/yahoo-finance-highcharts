@@ -4,21 +4,6 @@
   <p>Cash invested: $<%= @user.cash_invested %></p>
 </div>
 
-<%= form_for :investment, url: investments_path, html: {id: "generate_stock_quote"}, method: :get, remote: true do |f| %>
-  <%= f.text_field :symbol, placeholder: "stock" %>
-  <%= f.submit "Discover", {class: 'btn'} %>
-<% end %>
-
-<%= form_for :investment, url: investments_path, method: :post do |f| %>
-  <%= f.text_field :number_of_shares, placeholder: "quantity" %>
-  <%= f.submit "Buy" %>
-<% end %>
-
-<%= form_for :investment, url: investment_path, html: {id: "add_stock"}, method: :put do |f| %>
-  <%= f.text_field :number_of_shares, placeholder: "quantity", class: 'shares' %> shares of
-  <%= f.text_field :symbol, placeholder: "symbol", class: 'shares' %>
-  <%= f.submit "Buy", {class: 'btn'} %>
-<% end %>
 
 <h1>Portfolio</h1>
 

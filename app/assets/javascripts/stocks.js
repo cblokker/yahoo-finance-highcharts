@@ -5,7 +5,6 @@ $(document).ready(function() {
     }
   });
 
-
   var $form = $('form[id=generate_graph]');
   var $formUser = $('form[id=generate_stock_quote]');
   var $formBuyStock = $('form[id=buy_stock]');
@@ -68,6 +67,14 @@ $(document).ready(function() {
     $(this).next().fadeToggle('fast');
   })
 
+  // update buy button value when user inputs number of shares
+  $('body').on('input', '#investment_number_of_shares', function() {
+    value = $('#stock-info p').first().text().replace("Price: $", "");
+    console.log(value);
+    var total = $('#investment_number_of_shares').val() * value;
+    $('#buy_button').val('$' + total.toString() + ' buy');
+  });
+
   $form.on('submit', ajaxGraph);
   // $formUser.on('submit', ajaxStockQuote);
   // $formBuyStock.on('submit', ajaxBuyStock);
@@ -91,8 +98,6 @@ function ajaxStockQuote() {
 function ajaxGraph() {
   event.preventDefault();
 
-  // $('#stock-wrapper').slideToggle('fast');
-
   $.ajax('/stocks', {
     type: 'POST',
     dataType: 'json',
@@ -101,14 +106,12 @@ function ajaxGraph() {
       $('#container').html("ERROR");
     }
   }).done(function(response) {
-    console.log(response.currentStockData)
     dataArray = generateDataArray(response.pastStockData);
     $('#stock-info').html(injectStockHTML(response.currentStockData));
+    $('#actions').html(injectBuyButtonStock(response.currentStockData));
     renderGraph(dataArray, response.currentStockData.symbol);
-
   })
 }
-
 
 
 function ajaxBuyStock() {
@@ -161,49 +164,38 @@ function generateDataArray(resultObj) {
 
 
 function injectStockHTML(data) {
+  var html = '<h1>' + data.symbol + '</h1>'
+  html += '<p>Price: $' + data.ask + '</p>'
+  html += '<p>P/E:</p>'
+  html += '<p>P/B:</p>'
+  html += '<p>EPS:</p>'
+  html += '<p>ROA:</p>'
+  html += '<p>ROE:</p>'
+  html += '<p>Net Margin:</p>'
+  html += '<p>Rev. Growth:</p>'
+  console.log(html);
+  return html
+};
+
+function injectBuyButtonStock(data) {
   var html = '<form accept-charset="UTF-8" action="/investments" method="post">'
   html += '<div style="display:none">'
   html += '<input name="utf8" type="hidden" value="✓">'
   html += '<input type="hidden" name="investment[symbol]", value="' + data.symbol + '">'
   html += '<input name="authenticity_token" type="hidden" value="L58avNu9qLu/WYXvFTWix+yXF52CwjijJ7m5KX48z68="></div>'
-  html += '<input id="investment_number_of_shares" name="investment[number_of_shares]" placeholder="quantity" type="text">'
-  html += '<input name="commit" type="submit" value="Buy">'
+  html += '<input id="investment_number_of_shares" name="investment[number_of_shares]" placeholder="quantity" type="text" class="shares"> shares x $' + data.ask 
+  html += '<input id="buy_button" name="commit" type="submit" value="Buy" class="btn">'
   html += '</form>'
 
-  html += '<p><b>Asking Price: </b>' + data.ask + '</p>';
-  html += '<p><b> Bid Price: </b>' + data.bid + '</p>';
-  html += '<p><b> Last trade date: </b>' + data.last_trade_date  + '</p>';
-  html += '<p><b> PE ratio: </b>' + data.pe_ratio  + '</p>';
-  html += '<p><b> Average Daily Volume: </b>' + data.average_daily_volume  + '</p>';
-  html += '<p><b> Earnings Per Share: </b>' + data.earnings_per_share  + '</p>';
-  html += '<p><b> 52 Week Low: </b>' + data.low_52_weeks  + '</p>';
-  html += '<p><b> 52 Week High: </b>' + data.high_52_weeks  + '</p>';
-  html += '<p><b> One Year Target Price: </b>' + data.one_year_target_price  + '</p>';
-  html += '<p><b> 52 week range: </b>' + data.weeks_range_52  + '</p>';
-  html += '<p><b> Day Value Change: </b>' + data.day_value_change  + '</p>';
-  html += '<p><b> Dividend Yield: </b>' + data.dividend_yield + '</p>';
-  console.log(html);
   return html
-};
+}
 
 
 function renderGraph(dataArray, symbol) {
-  // $('#stock-wrapper').on('click', '.feedback-header', function() {
-  //   if (event.target.nodeName != 'BUTTON') {
-  //     $(this).next().slideToggle('fast');
-  //     $(".feedback-comments").not($(this).next()).slideUp('fast');
-  //   }
-  // })
-
-  // $('html, body').animate({scrollTop: $('#stock-graph').offset().top }, 'slow');
-
   $('#stock-graph').highcharts('StockChart', {
     rangeSelector: {
       selected: 1,
       inputEnabled: $('#container').width() > 480
-    },
-    title: {
-      text: symbol + ' Stock Price'
     },
     yAxis: {
       type: 'logarithmic',
@@ -234,8 +226,6 @@ function renderGraph(dataArray, symbol) {
       }
     }]
   });
-
-  // $(this).next().slideToggle('fast');
 
   $("#stock-wrapper").slideToggle('slow');
 };
