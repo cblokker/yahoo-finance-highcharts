@@ -109,6 +109,7 @@ function ajaxGraph() {
     dataArray = generateDataArray(response.pastStockData);
     $('#stock-info').html(injectStockHTML(response.currentStockData));
     $('#actions').html(injectBuyButtonStock(response.currentStockData));
+    $('#share-price').html(injectSharePrice(response.currentStockData));
     renderGraph(dataArray, response.currentStockData.symbol);
   })
 }
@@ -178,15 +179,12 @@ function injectStockHTML(data) {
 };
 
 function injectBuyButtonStock(data) {
-  var html = '<form accept-charset="UTF-8" action="/investments" method="post">'
-  html += '<div style="display:none">'
-  html += '<input name="utf8" type="hidden" value="✓">'
-  html += '<input type="hidden" name="investment[symbol]", value="' + data.symbol + '">'
-  html += '<input name="authenticity_token" type="hidden" value="L58avNu9qLu/WYXvFTWix+yXF52CwjijJ7m5KX48z68="></div>'
-  html += '<input id="investment_number_of_shares" name="investment[number_of_shares]" placeholder="quantity" type="text" class="shares"> shares x $' + data.ask 
-  html += '<input id="buy_button" name="commit" type="submit" value="Buy" class="btn">'
-  html += '</form>'
+  html = '<input type="hidden" name="investment[symbol]", value="' + data.symbol + '">'
+  return html
+}
 
+function injectSharePrice(data) {
+  html = '$' + data.ask
   return html
 }
 

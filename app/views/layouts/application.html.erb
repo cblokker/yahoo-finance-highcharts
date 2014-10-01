@@ -47,7 +47,13 @@
   <div id="stock-wrapper">
     <div id="stock-info"></div>
     <div id="stock-graph"></div>
-    <div id="actions"></div>
+    <%= form_for :investment, url: investments_path, method: :post do |f| %>
+      <div id="actions"></div>
+      <%= f.text_field :number_of_shares, placeholder: "quantity", class: 'shares' %> shares x
+      <div id="share-price"></div>
+      <%= f.submit "Buy", {class: 'btn', id: 'buy_button'} %>
+    <% end %>
+
   </div>
 
   <div class="container">
