@@ -21,6 +21,8 @@ ActiveRecord::Schema.define(version: 20140925205413) do
     t.integer  "stock_id"
     t.integer  "number_of_shares"
     t.float    "value"
+    t.float    "percentage_of_portfolio"
+    t.float    "percent_change"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -72,6 +74,7 @@ ActiveRecord::Schema.define(version: 20140925205413) do
     t.integer  "password_digest"
     t.float    "cash_available"
     t.float    "cash_invested"
+    t.float    "cash_total"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

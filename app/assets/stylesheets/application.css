@@ -25,16 +25,17 @@ ul {
 }
 
 #landing-image {
- 	position: absolute;
-    display: block;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    background: #333 url('landing.png') no-repeat top center;
-    background-size: cover;
+  position: absolute;
+  display: block;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: url('landing.png') no-repeat top center;
+  background-size: cover;
+  z-index: 1;
 }
 
 a {
@@ -46,7 +47,7 @@ form {
   padding: 0px;
 }
 
-.stock-search {  
+.stock-search {
   float: left;
   margin-top: -12px;
   margin-left: 30px;
@@ -62,12 +63,16 @@ input:focus, textarea:focus, button:focus {
   outline: none;
 }
 
+.investment-item {
+  display: inline-table;
+}
+
 .investment-card {
   color: #333;
-  display: inline-block;
+/*  display: inline-block;*/
   text-align: left;
   width: 200px;
-  margin: 10px;
+/*  margin: 10px;*/
   padding: 20px;
   border: 1px solid;
   border-color: #999;
@@ -92,13 +97,14 @@ input:focus, textarea:focus, button:focus {
 
 
 .investment-card-details {
-  position: absolute;
+/*  position: absolute;*/
+/*  top: 500px;*/
   text-align: center;
   text-align: left;
   display: none;
-  width: 800px;
-  margin: 10px;
-  padding: 20px;
+/*  margin: 10px;*/
+/*  padding: 20px;*/
+/*  margin-right: 80%;*/
   border: 1px solid;
   border-color: #999;
   background: rgba(33, 102, 172, 0.1);
@@ -119,7 +125,7 @@ nav {
   padding: 20px;
   padding-left: 10px;
   position: fixed;
-  z-index: 2;
+  z-index: 10;
   -webkit-box-shadow: 0 0 11px 1px #333;
 }
 
@@ -165,16 +171,18 @@ nav {
 }
 
 #stock-wrapper {
+  z-index: 5;
   margin-top: 110px;
+  margin-left: 20px;
   background: teal;
-  position: fixed;
+  position: absolute;
   display: none;
 }
 
 #stock-info {
-  width: 200px;
+  width: 150px;
   float: left;
-  border: 1px solid;
+/*  border: 1px solid;*/
   padding: 20px;
 }
 
@@ -184,7 +192,7 @@ nav {
 }
 
 #stock-graph {
-  border: 1px solid;
+/*  border: 1px solid;*/
   height: 300px;
   padding: 20px;
   float: left;

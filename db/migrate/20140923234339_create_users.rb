@@ -6,6 +6,7 @@ class CreateUsers < ActiveRecord::Migration
       t.integer :password_digest
       t.float :cash_available
       t.float :cash_invested
+      t.float :cash_total
 
       t.timestamps
     end

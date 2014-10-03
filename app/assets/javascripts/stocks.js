@@ -5,15 +5,17 @@ $(document).ready(function() {
     }
   });
 
-  var $form = $('form[id=generate_graph]');
-  var $formUser = $('form[id=generate_stock_quote]');
-  var $formBuyStock = $('form[id=buy_stock]');
-  var $investmentCard = $('.investment-card');
+  var $form = $('form[id=generate_graph]'),
+      $formUser = $('form[id=generate_stock_quote]'),
+      $formBuyStock = $('form[id=buy_stock]'),
+      $investmentCard = $('.investment-card'),
 
-  var $buttonPerformance = $('button[name=performance]');
-  var $buttonFundamentals = $('button[name=fundamentals]');
-  var $buttonTransactionHistory = $('button[name=transaction-history]');
-  var $buttonHeadlines = $('button[name=headlines]');
+      $stockInfoButton = $('.stock-info-button'),
+
+      $buttonPerformance = $('button[name=performance]'),
+      $buttonFundamentals = $('button[name=fundamentals]'),
+      $buttonTransactionHistory = $('button[name=transaction-history]'),
+      $buttonHeadlines = $('button[name=headlines]');
 
   $buttonPerformance.on('click', performaceButtonToggle);
   $buttonFundamentals.on('click', fundamentalsButtonToggle);
@@ -63,19 +65,42 @@ $(document).ready(function() {
     $(".investment-card").not(this).removeClass("investment-card-active");
     $(this).toggleClass("investment-card-active");
 
-    $(".investment-card-details").not($(this).next()).fadeOut('fast');
-    $(this).next().fadeToggle('fast');
+
+    $(this).next().slideToggle('fast');
+    $(".investment-card-details").not($(this).next()).slideUp('fast');
+
+    // $(".investment-card-details").not($(this).next()).fadeOut('fast');
+    // $(this).next().fadeToggle('fast');
   })
 
   // update buy button value when user inputs number of shares
   $('body').on('input', '#investment_number_of_shares', function() {
-    value = $('#stock-info p').first().text().replace("Price: $", "");
+    var value = $('#stock-info p').first().text().replace("Price: $", "");
     console.log(value);
     var total = $('#investment_number_of_shares').val() * value;
     $('#buy_button').val('$' + total.toString() + ' buy');
   });
 
+  //   $('body').on('input', '#investment_number_of_shares', function() {
+  //   var value = $('#stock-info p').first().text().replace("Price: $", "");
+  //   var total = $('#investment_number_of_shares').val() * value;
+  //   $('#buy_button').val('$' + total.toString() + ' buy');
+  // });
+
   $form.on('submit', ajaxGraph);
+
+  $.ajax('/investments', {
+    type: 'GET',
+    dataType: 'json',
+    data: $(this).serialize()
+  }).done(function(data) {
+    // console.log(data);
+    $('.stock-info').html(injectStockHTML(data));
+  })
+
+  // renderPieChart();
+
+  
   // $formUser.on('submit', ajaxStockQuote);
   // $formBuyStock.on('submit', ajaxBuyStock);
 });
@@ -186,6 +211,50 @@ function injectBuyButtonStock(data) {
 function injectSharePrice(data) {
   html = '$' + data.ask
   return html
+}
+
+function generatePieChartData(portfolio) {
+  
+
+}
+
+function renderPieChart(data) {
+  $('#pie-chart').highcharts({
+    tooltip: {
+      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    plotOptions: {
+      pie: {
+        allowPointSelect: true,
+        cursor: 'pointer',
+        dataLabels: {
+          enabled: true,
+          format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+          style: {
+            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+          }
+        }
+      }
+    },
+    exporting: { enabled: false },
+    series: [{
+      type: 'pie',
+      name: 'Browser share',
+      data: [
+        ['Firefox',   45.0],
+        ['IE',       26.8],
+        {
+          name: 'Chrome',
+          y: 12.8,
+          sliced: true,
+          selected: true
+        },
+        ['Safari',    8.5],
+        ['Opera',     6.2],
+        ['Others',   0.7]
+      ]
+    }]
+  });
 }
 
 
