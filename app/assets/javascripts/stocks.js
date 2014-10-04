@@ -5,6 +5,44 @@ $(document).ready(function() {
     }
   });
 
+  var substringMatcher = function(strs) {
+    return function findMatches(q, cb) {
+      var matches, substrRegex;
+   
+      // an array that will be populated with substring matches
+      matches = [];
+   
+      // regex used to determine if a string contains the substring `q`
+      substrRegex = new RegExp(q, 'i');
+   
+      // iterate through the pool of strings and for any string that
+      // contains the substring `q`, add it to the `matches` array
+      $.each(strs, function(i, str) {
+        if (substrRegex.test(str)) {
+          // the typeahead jQuery plugin expects suggestions to a
+          // JavaScript object, refer to typeahead docs for more info
+          matches.push({ value: str });
+        }
+      });
+   
+      cb(matches);
+    };
+  };
+   
+  var states = ['aapl', 'aa', 'amzn', 'nflx', 'gild', 'fb', 'lulu'];
+   
+  $('.typeahead').typeahead({
+    hint: true,
+    highlight: true,
+    minLength: 1,
+  },
+  {
+    name: 'states',
+    displayKey: 'value',
+    source: substringMatcher(states)
+  })
+
+
   var $form = $('form[id=generate_graph]'),
       $formUser = $('form[id=generate_stock_quote]'),
       $formBuyStock = $('form[id=buy_stock]'),
@@ -21,16 +59,6 @@ $(document).ready(function() {
   $buttonFundamentals.on('click', fundamentalsButtonToggle);
   $buttonTransactionHistory.on('click', transactionHistoryButtonToggle);
   $buttonHeadlines.on('click', headlinesButtonToggle);
-
-  // $buttonArticle.on('click', articleButtonToggle)
-  // $buttonBill.on('click', billButtonToggle)
-  // $buttonEmail.on('click', emailButtonAccordian)
-  // $btn.on('click', toggleButtons);
-
-  // function toggleButtons() {
-  //   $btn.not(this).removeClass('btnactive');
-  //   $(this).toggleClass('btnactive');
-  // }
 
   function performaceButtonToggle() {
     $('.investment-performance').fadeIn('fast');
@@ -65,12 +93,8 @@ $(document).ready(function() {
     $(".investment-card").not(this).removeClass("investment-card-active");
     $(this).toggleClass("investment-card-active");
 
-
     $(this).next().slideToggle('fast');
     $(".investment-card-details").not($(this).next()).slideUp('fast');
-
-    // $(".investment-card-details").not($(this).next()).fadeOut('fast');
-    // $(this).next().fadeToggle('fast');
   })
 
   // update buy button value when user inputs number of shares
@@ -81,12 +105,6 @@ $(document).ready(function() {
     $('#buy_button').val('$' + total.toString() + ' buy');
   });
 
-  //   $('body').on('input', '#investment_number_of_shares', function() {
-  //   var value = $('#stock-info p').first().text().replace("Price: $", "");
-  //   var total = $('#investment_number_of_shares').val() * value;
-  //   $('#buy_button').val('$' + total.toString() + ' buy');
-  // });
-
   $form.on('submit', ajaxGraph);
 
   $.ajax('/investments', {
@@ -94,17 +112,10 @@ $(document).ready(function() {
     dataType: 'json',
     data: $(this).serialize()
   }).done(function(data) {
-    // console.log(data);
     $('.stock-info').html(injectStockHTML(data));
   })
 
   if ($('#pie-chart').size() > 0) { ajaxPieChart(); }
-
-  // renderPieChart();
-
-  
-  // $formUser.on('submit', ajaxStockQuote);
-  // $formBuyStock.on('submit', ajaxBuyStock);
 });
 
 
@@ -123,22 +134,24 @@ function ajaxStockQuote() {
 
 
 function ajaxGraph() {
-  event.preventDefault();
+  // if (event.which == 13) {
+    event.preventDefault();
 
-  $.ajax('/stocks', {
-    type: 'POST',
-    dataType: 'json',
-    data: $(this).serialize(),
-    error: function(xhr, status, error) {
-      $('#container').html("ERROR");
-    }
-  }).done(function(response) {
-    dataArray = generateDataArray(response.pastStockData);
-    $('#stock-info').html(injectStockHTML(response.currentStockData));
-    $('#actions').html(injectBuyButtonStock(response.currentStockData));
-    $('#share-price').html(injectSharePrice(response.currentStockData));
-    renderGraph(dataArray, response.currentStockData.symbol);
-  })
+    $.ajax('/stocks', {
+      type: 'POST',
+      dataType: 'json',
+      data: $(this).serialize(),
+      error: function(xhr, status, error) {
+        $('#container').html("ERROR");
+      }
+    }).done(function(response) {
+      dataArray = generateDataArray(response.pastStockData);
+      $('#stock-info').html(injectStockHTML(response.currentStockData));
+      $('#actions').html(injectBuyButtonStock(response.currentStockData));
+      $('#share-price').html(injectSharePrice(response.currentStockData));
+      renderGraph(dataArray, response.currentStockData.symbol);
+    })
+  // }
 }
 
 
@@ -251,6 +264,9 @@ function renderPieChart(data) {
         }
       }
     },
+    credits: {
+      enabled: false
+    },
     exporting: { enabled: false },
     series: [{
       type: 'pie',
@@ -266,6 +282,9 @@ function renderGraph(dataArray, symbol) {
     rangeSelector: {
       selected: 1,
       inputEnabled: $('#container').width() > 480
+    },
+    credits: {
+      enabled: false
     },
     yAxis: {
       type: 'logarithmic',

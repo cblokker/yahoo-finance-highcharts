@@ -1,23 +1,24 @@
 <div id="user-info">
-  <h1><%= @user.username %></h1>
-  <p>Cash available: $<%= @user.cash_available %></p>
-  <p>Cash invested: $<%= @user.cash_invested %></p>
+  <div id="user-basic">
+    <h1><%= @user.username %></h1>
+    <p>Total: $<%= @user.cash_available %></p>
+    <p>$ change: $<%= @user.cash_available %></p>
+    <p>% change: <%= @user.cash_invested %>%</p>
+  </div>
+
+  <div id="pie-chart"></div>
+
 </div>
-
-<div id="pie-chart"></div>
-
-
-
 
 <h1>Portfolio</h1>
 
 <% @user.investments.each do |investment| %>
   <div class="investment-item card">
     <div class="investment-card front">
-      <%= investment.stock.symbol %><br>
-      <%= investment.percentage_of_portfolio %>% of portfolio<br>
-      <%= investment.number_of_shares %> shares<br> 
-      $<%= investment.value %> invested <br>
+      <%= investment.stock.symbol %> <br>
+      $<%= investment.stock.ask %> <br>
+      <%= investment.stock.change %> (<%= investment.stock.change_in_percent %>)<br>
+      <%= investment.number_of_shares %> shares
     </div>
 
     <div class="investment-card-details back">
@@ -79,7 +80,6 @@
       <% end %>
     </div>
   </div>
-
 
 <% end %>
 <br>

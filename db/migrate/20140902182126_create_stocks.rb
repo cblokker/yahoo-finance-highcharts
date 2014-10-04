@@ -14,6 +14,8 @@ class CreateStocks < ActiveRecord::Migration
       t.string :weeks_range_52
       t.string :day_value_change
       t.string :dividend_yield
+      t.string :change
+      t.string :change_in_percent
 
       t.timestamps
     end

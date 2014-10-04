@@ -54,6 +54,8 @@ ActiveRecord::Schema.define(version: 20140925205413) do
     t.string   "weeks_range_52"
     t.string   "day_value_change"
     t.string   "dividend_yield"
+    t.string   "change"
+    t.string   "change_in_percent"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

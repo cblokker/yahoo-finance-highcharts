@@ -44,7 +44,9 @@ class Stock < ActiveRecord::Base
       one_year_target_price: current_stock_data[0].one_year_target_price,
       weeks_range_52:        current_stock_data[0].weeks_range_52,
       day_value_change:      current_stock_data[0].day_value_change,
-      dividend_yield:        current_stock_data[0].dividend_yield
+      dividend_yield:        current_stock_data[0].dividend_yield,
+      change_in_percent:     current_stock_data[0].change_in_percent,
+      change:                current_stock_data[0].change
     )
   end
 
@@ -64,7 +66,9 @@ class Stock < ActiveRecord::Base
         :one_year_target_price,
         :weeks_range_52,
         :day_value_change,
-        :dividend_yield
+        :dividend_yield,
+        :change_in_percent,
+        :change
       ]
     )
   end

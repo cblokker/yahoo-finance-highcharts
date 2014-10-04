@@ -24,6 +24,17 @@ ul {
   list-style-type: none;
 }
 
+#pie-chart {
+  display: inline-table;
+/*  opacity: 0.5;*/
+}
+
+#user-basic {
+/*  display: inline-table;*/
+  float: left;
+}
+
+
 #landing-image {
   position: absolute;
   display: block;
@@ -165,9 +176,8 @@ nav {
 
 #user-info {
   margin-top: 100px;
-  float: center;
-  width: 200px;
-  background-color: #F6F6EF;
+  width: 100%;
+  background-color: #aaa;
 }
 
 #stock-wrapper {
@@ -175,7 +185,7 @@ nav {
   margin-top: 110px;
   margin-left: 20px;
   background: teal;
-  position: absolute;
+  position: fixed;
   display: none;
 }
 
@@ -190,6 +200,7 @@ nav {
   padding: 5px;
   margin: 0px;
 }
+
 
 #stock-graph {
 /*  border: 1px solid;*/
@@ -210,6 +221,14 @@ nav {
   margin-top: 120px;
 }
 
+.typeahead {
+  position: absolute;
+  margin: 0px;
+  margin-top: -13px;
+/*  margin-top: -12px;
+/*  padding: 10px;*/
+}
+
 .investment-performance {
   display: none;
 }
@@ -226,5 +245,33 @@ nav {
   display: none;
 }
 
+
+.tt-query {
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.tt-hint {
+    color: #999;
+}
+
+.tt-dropdown-menu {
+    width: 210px;
+    margin-top: 12px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+.tt-suggestion {
+    display: block;
+    padding-left: 10px;
+}
+.tt-suggestion.tt-is-under-cursor {
+    color: #ccc;
+    background-color: #dfdfdf;
+}
+.tt-suggestion.tt-is-under-cursor a {
+    color: #ccc;
+}
 
 
