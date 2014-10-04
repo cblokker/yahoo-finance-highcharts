@@ -64,7 +64,7 @@
     </div>
 
     <div>
-      <%= form_for :investment, url: investment_path, html: {id: "add_stock"}, method: :put do |f| %>
+      <%= form_for :investment, url: investments_path, html: {id: "add_stock"}, method: :post do |f| %>
         <%= f.hidden_field :symbol, value: investment.stock.symbol %>
         <%= f.text_field :number_of_shares, placeholder: "quantity", class: 'shares' %>
         <div id="share-price"></div>

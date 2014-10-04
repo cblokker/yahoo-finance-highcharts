@@ -23,10 +23,11 @@ class InvestmentsController < ApplicationController
     @stock = Stock.find_by(symbol: stock_symbol)
     value = investment_params[:number_of_shares].to_i * @stock.ask.to_i
     percentage_of_portfolio = (value / (@user.cash_available + @user.cash_invested)) * 100
-
+    p percentage_of_portfolio
     @investment = Investment.where("stock_id = ? AND user_id = ?", @stock.id, @user.id)
 
     if @investment.blank? && @user.cash_available > value
+      p "hi"
       @investment = Investment.create(
         stock: @stock,
         user: @user,
@@ -50,6 +51,7 @@ class InvestmentsController < ApplicationController
       @user.update_attribute(:cash_invested, cash_invested)
 
     elsif @user.cash_available > value
+      p "there"
       @investment[0].number_of_shares += investment_params[:number_of_shares].to_i
       @investment[0].value += value
       @investment[0].percentage_of_portfolio += percentage_of_portfolio
@@ -124,6 +126,7 @@ class InvestmentsController < ApplicationController
     elsif investment_params[:number_of_shares].to_i < @investment[0].number_of_shares
       @investment[0].number_of_shares -= investment_params[:number_of_shares].to_i
       @investment[0].value -= value
+      @investment[0].percentage_of_portfolio -= percentage_of_portfolio
       @investment[0].save
 
       Transaction.create(

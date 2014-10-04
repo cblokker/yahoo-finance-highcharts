@@ -98,6 +98,8 @@ $(document).ready(function() {
     $('.stock-info').html(injectStockHTML(data));
   })
 
+  if ($('#pie-chart').size() > 0) { ajaxPieChart(); }
+
   // renderPieChart();
 
   
@@ -149,6 +151,19 @@ function ajaxBuyStock() {
     data: $(this).serialize()
   }).done(function(response) {
     // console.log(response)
+  })
+}
+
+function ajaxPieChart() {
+  console.log('heyyy');
+
+  $.ajax('/users', {
+    type: 'GET',
+    dataType: 'json'
+  }).done(function(response) {
+    console.log(response);
+    renderPieChart(response);
+
   })
 }
 
@@ -240,19 +255,7 @@ function renderPieChart(data) {
     series: [{
       type: 'pie',
       name: 'Browser share',
-      data: [
-        ['Firefox',   45.0],
-        ['IE',       26.8],
-        {
-          name: 'Chrome',
-          y: 12.8,
-          sliced: true,
-          selected: true
-        },
-        ['Safari',    8.5],
-        ['Opera',     6.2],
-        ['Others',   0.7]
-      ]
+      data: data
     }]
   });
 }

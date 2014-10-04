@@ -18,8 +18,10 @@ class StocksController < ApplicationController
 
     # create stock - seed history data or update stock
     if @stock.nil?
+      p "hi"
       @stock = Stock.create_stock_data(stock_symbol)
     elsif time_since_stock_updated <= 1
+      p "there"
       @stock = Stock.update_stock_data(@stock)
     end
 

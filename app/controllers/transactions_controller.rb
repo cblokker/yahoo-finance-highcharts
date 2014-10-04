@@ -15,7 +15,6 @@ class TransactionsController < ApplicationController
     stock_symbol = investment_params[:symbol].upcase
     @stock = Stock.find_by(symbol: stock_symbol)
 
-
     redirect_to user_path(@user)
   end
 

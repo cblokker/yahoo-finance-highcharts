@@ -2,6 +2,19 @@ class UsersController < ApplicationController
   def index
     @user = User.find(session[:user_id])
     @investments = @user.investments.all
+    investment_data = @user.investments.map do |investment|
+      [investment.stock.symbol, investment.percentage_of_portfolio]
+    end
+
+    p sum = investment_data.sum { |i| i[1]}
+
+    investment_data << ['cash balance', 100 - sum]
+
+    if request.xhr?
+      render json: investment_data.to_json
+    else
+      render :index
+    end
   end
 
   def show
